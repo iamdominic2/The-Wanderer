@@ -1,0 +1,83 @@
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    Motion.GoToXY(0, 0);
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(entity tick)
+{
+    Looks.Hide();
+    If (text cooldown > 1)
+    {
+        Looks.Show();
+        Looks.SwitchCostumeTo(text);
+        Looks.SetEffectTo(GHOST, 25);
+    }
+    text cooldown += -2;
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+costume1.svg
+costume2.svg
+costume3.svg
+costume4.svg
+costume5.svg
+costume6.svg
+costume7.svg
+costume8.svg
+costume9.svg
+costume10.svg
+costume11.svg
+costume12.svg
+costume13.svg
+costume14.svg
+costume15.svg
+costume16.svg
+costume17.svg
+costume18.svg
+costume19.svg
+costume20.svg
+costume21.svg
+costume22.svg
+costume23.svg
+costume24.svg
+costume25.svg
+costume26.svg
+costume27.svg
+costume28.svg
+costume29.svg
+costume30.svg
+costume31.svg
+costume32.svg
+costume33.svg
+costume34.svg
+costume35.svg
+costume36.svg
+costume37.svg
+costume38.svg
+costume39.svg
+costume40.svg
+costume41.svg
+costume42.svg
+costume43.svg
+costume44.svg
+costume45.svg
+costume46.svg
+costume47.svg
+costume48.svg
+costume49.svg
+costume50.svg
+costume52.svg
+costume53.svg
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+Chomp.wav
+Glug.wav

@@ -1,0 +1,101 @@
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    frame = 0;
+    Forever
+    {
+        Looks.SetSizeTo(200);
+        Motion.GoTo(Player);
+        Motion.PointInDirection(Sensing.Of(direction, Player));
+        frame += 1;
+        Looks.SetEffectTo(GHOST, 100);
+    }
+}
+
+WhenGreenFlagClicked()
+{
+    Forever
+    {
+        If (Not (Sensing.KeyPressed(q)))
+        {
+            attacking = -1;
+        }
+        If ((((Not ((text > 22))) Or (text > 34)) Or (text cooldown < 1)) And ((Sensing.KeyPressed(space) And (Not ((Costume.GetNumberName(number) == 2)))) And (Not ((Location == 3)))))
+        {
+            Sound.Play(weapon);
+            attacking = 1;
+            frame = 0;
+            Control.Wait(0);
+            Repeat Until ((Not (Sensing.KeyPressed(space))) And (frame > 15))
+            {
+                attacking = 0;
+            }
+        }
+    }
+}
+
+WhenGreenFlagClicked()
+{
+    Forever
+    {
+        If (Sensing.KeyPressed(q) And List.ContainsItem(Key Items, 55))
+        {
+            Sound.Play(arrow);
+            Looks.SwitchCostumeTo(costume3);
+            Repeat Until ((Sensing.TouchingObject(Entity) Or Sensing.TouchingObject(Walls)) Or (Costume.GetNumberName(number) == 16))
+            {
+                Looks.NextCostume();
+            }
+            attacking = 1;
+            arrow = 2;
+            Control.Wait(0);
+            attacking = 0;
+            Control.Wait(0);
+            Looks.SwitchCostumeTo(costume1);
+            arrow = 1;
+            Repeat (7)
+            {
+                Control.Wait(0);
+            }
+        }
+        arrow = 1;
+    }
+}
+
+WhenGreenFlagClicked()
+{
+    Forever
+    {
+        Sound.SetVolumeTo((50 * (Sensing.TouchingObject(Entity) + 1)));
+    }
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+costume1.png
+costume2.png
+costume3.png
+costume4.png
+costume5.png
+costume6.png
+costume7.png
+costume8.png
+costume9.png
+costume10.png
+costume11.png
+costume12.png
+costume13.png
+costume14.png
+costume15.png
+costume16.png
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+arrow.wav
+BTL-MON-HIT05.mp3.wav
+sword.wav
+sword1.wav
+sword2.wav

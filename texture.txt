@@ -1,0 +1,40 @@
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    Looks.SetEffectTo(BRIGHTNESS, 100);
+    Looks.SetEffectTo(GHOST, 100);
+    Motion.GoToXY(0, 0);
+    Forever
+    {
+        Looks.SwitchCostumeTo(Location);
+    }
+}
+
+
+//----- Orphaned blocks -----------------------------------------------------------------------------------------------
+
+Looks.SetEffectTo(GHOST, 100);
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+costume1.png
+costume2.png
+costume3.png
+costume4.png
+costume5.png
+costume6.png
+costume7.svg
+costume8.svg
+costume9.svg
+costume10.svg
+costume11.svg
+costume12.svg
+costume13.svg
+costume14.svg
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

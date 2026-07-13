@@ -1,0 +1,149 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+angry = 0
+distance = 13.251447180343
+height = 215.84122724282
+myhp = 0
+scan lines = 120
+type = 0
+vx = 0
+vy = 0
+x = 240
+
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(raycast)
+{
+    Call Raycast;
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define Draw(string type) at(string x) dist(string dist) (warp=true)
+{
+    Repeat Until (DRAW DIST[(DRAW IDX - 1)] > dist)
+    {
+        DRAW IDX += -1;
+    }
+    Repeat Until (DRAW DIST[DRAW IDX] < dist)
+    {
+        DRAW IDX += 1;
+    }
+    List.InsertItem(DRAW TYPE, DRAW IDX, type);
+    List.InsertItem(DRAW X, DRAW IDX, x);
+    List.InsertItem(DRAW DIST, DRAW IDX, dist);
+}
+
+Define Raycast (warp=true)
+{
+    Motion.PointInDirection(Sensing.Of(direction, Player));
+    Looks.SetEffectTo(GHOST, 100);
+    x = -240;
+    scan lines = (480 / RES);
+    Repeat (scan lines)
+    {
+        Motion.PointInDirection((Sensing.Of(direction, Player) + atan((x / DV))));
+        Call Single Ray;
+        x += RES;
+    }
+}
+
+Define Single Ray (warp=true)
+{
+    Motion.GoTo(Player);
+    Repeat Until (Sensing.TouchingObject(Walls) Or Sensing.TouchingObject(_edge_))
+    {
+        Motion.Move(2);
+    }
+    Repeat Until (Not (Sensing.TouchingObject(Walls)))
+    {
+        Motion.Move(-0.01);
+    }
+    distance = (Sensing.DistanceTo(Player) * cos((Sensing.Of(direction, Player) - Motion.Direction())));
+    height = ((DV * 10) / distance);
+    texture offset = (((Motion.XPosition() + Motion.YPosition()) / 25) % 1);
+    texture offset = floor((texture offset * TEXTURE SIZE));
+    If ((Sensing.TouchingObject(texture) And (Not (((Location > 3) Or (Location < 7))))) Or (((Location == 2) Or (Location == 3)) Or (Location == 11)))
+    {
+        texture offset += ((6 + (0 * 480)) * TEXTURE SIZE);
+    }
+    If (Sensing.TouchingObject(texture) And (Location == 4))
+    {
+        texture offset += ((8 + (1 * 480)) * TEXTURE SIZE);
+    }
+    If (((Location == 5) Or (Location == 6)) Or (Location == 7))
+    {
+        If Sensing.TouchingObject(texture)
+        {
+            texture offset += ((1 + (0 * 480)) * TEXTURE SIZE);
+        }
+        Else
+        {
+            texture offset += ((4 + (1 * 480)) * TEXTURE SIZE);
+        }
+    }
+    If (Location == 8)
+    {
+        texture offset += ((9 + (0 * 480)) * TEXTURE SIZE);
+        If Sensing.TouchingObject(texture)
+        {
+            texture offset += 2;
+        }
+        Else
+        {
+            texture offset += -2;
+        }
+    }
+    If (Location == 9)
+    {
+        texture offset += ((9 + (1 * 480)) * TEXTURE SIZE);
+        If Sensing.TouchingObject(texture)
+        {
+            texture offset += ((1 + (0 * 480)) * TEXTURE SIZE);
+        }
+    }
+    If (Location == 12)
+    {
+        texture offset += ((5 + (1 * 480)) * TEXTURE SIZE);
+    }
+    If (Location == 13)
+    {
+        If Sensing.TouchingObject(texture)
+        {
+            texture offset += ((13 + (0 * 480)) * TEXTURE SIZE);
+        }
+        Else
+        {
+            texture offset += ((2 + (1 * 480)) * TEXTURE SIZE);
+        }
+    }
+    If (Location == 14)
+    {
+        texture offset += ((12 + (0 * 480)) * TEXTURE SIZE);
+    }
+    If (((Location == 15) Or (Location == 16)) Or (Location == 17))
+    {
+        texture offset += ((14 + (0 * 480)) * TEXTURE SIZE);
+    }
+    If Sensing.TouchingObject(Teleporter)
+    {
+        Call Draw(123) at(x) dist(distance);
+    }
+    Else
+    {
+        Call Draw((texture offset + 10000001)) at(x) dist(distance);
+    }
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+costume1.png
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

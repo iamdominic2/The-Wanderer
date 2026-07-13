@@ -1,0 +1,193 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+distance = 
+dy = -29.414060003605
+height = 0
+row# = 127
+scan idx = 15387
+type = 
+type = 0
+x = 
+y = -470.62496005769
+
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    Looks.Hide();
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(beat game)
+{
+    Motion.GoToXY(0, 0);
+    Stop(other scripts in sprite);
+    Looks.SwitchCostumeTo(costume1);
+    Looks.Show();
+    Sound.StopAllSounds();
+    Looks.SetSizeTo(100);
+    Music = 25;
+    Looks.ClearGraphicEffects();
+}
+
+WhenBroadcastReceived(paint)
+{
+    Call Draw;
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define Draw (warp=true)
+{
+    Pen.SetPenSizeTo(RES);
+    row# = 1;
+    Repeat (List.Length(DRAW DIST))
+    {
+        row# += 1;
+        Call Draw Row;
+    }
+}
+
+Define Draw Row (warp=true)
+{
+    type = DRAW TYPE[row#];
+    x = DRAW X[row#];
+    distance = DRAW DIST[row#];
+    height = ((DV / distance) * 6);
+    If (type < 60)
+    {
+        Call Stamp Ent;
+        Stop(this script);
+    }
+    Looks.SetSizeTo(0);
+    y = height;
+    Motion.GoToXY(x, y);
+    height = ((height * 2) - RES);
+    dy = (0 - (height / TEXTURE SIZE));
+    scan idx = (type % 1000000);
+    Pen.SetPenTo(transparency, 100);
+    Pen.Down();
+    y = (height / 2);
+    Repeat ((TEXTURE SIZE / 2))
+    {
+        y += (dy * 2);
+        Pen.SetPenColorToColor(SCAN[scan idx]);
+        Pen.ChangePenBy(brightness, (25 - (distance / 2)));
+        If (type == 123)
+        {
+            Pen.SetPenColorToColor(#000000);
+        }
+        scan idx += 960;
+        Motion.SetY(y);
+    }
+    Pen.Clear();
+}
+
+Define Stamp Ent (warp=false)
+{
+    If (type == "")
+    {
+        Stop(this script);
+    }
+    Looks.SwitchCostumeTo(type);
+    If (height > 0)
+    {
+        Looks.SetSizeTo(height);
+    }
+    If (Looks.Size() > 200)
+    {
+        Looks.SetSizeTo(200);
+    }
+    Motion.GoToXY(0, 0);
+    Looks.ClearGraphicEffects();
+    If (Costume.GetNumberName(number) == 37)
+    {
+        Looks.SetEffectTo(COLOR, 50);
+    }
+    If (Costume.GetNumberName(number) == 38)
+    {
+        Looks.SetEffectTo(COLOR, 100);
+    }
+    If (Costume.GetNumberName(number) == 40)
+    {
+        Looks.SetEffectTo(COLOR, Infinity);
+    }
+    If (Costume.GetNumberName(number) == 41)
+    {
+        Looks.SetEffectTo(COLOR, 15);
+    }
+    Looks.SetEffectTo(BRIGHTNESS, ((0 - distance) / 2));
+    Motion.GoToXY(x, 0);
+    If ((Operator.Round(x) == Operator.Round(Motion.XPosition())) And (Not ((y > 0))))
+    {
+        Pen.Stamp();
+    }
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+a.png
+Air Devil.png
+arrow.png
+Arrow Tank.png
+Astral Devil.png
+b.png
+ball.png
+Blazepuff.png
+Bunny.png
+c.png
+Cat.png
+Cave Mamel.png
+Chef.svg
+costume1.svg
+d.png
+Dark Eye.png
+download.png
+download2.png
+download3.png
+Dragon.png
+dragon.png
+e.png
+emerald.png
+Fear Eye.png
+Firepuff.png
+firepuff.png
+Gather.png
+Golden Condor.png
+Gold Mamel.png
+gold shield.png
+Great Hen.png
+Hell Dragon.png
+Hell Gather.png
+Hen.png
+Inferno.png
+Inferno2.png
+Ironhead.png
+iron shield.png
+King.png
+Mage.png
+magic.png
+Mamel.png
+Minotaur.png
+Owl.png
+Pacorepkina.png
+Potion.png
+Potion2.png
+Potion3.png
+Pumkin.png
+shoes.png
+Shopkeeper.png
+Spike Bomb.png
+stone.png
+Tainted Insect.png
+Tank.png
+Tiger.png
+Tiger2.png
+web.png
+wood shield.png

@@ -1,0 +1,96 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+angry = 0
+count = 2
+myhp = 0
+type = 0
+vx = 0
+vy = 0
+
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    Looks.Hide();
+    Control.Wait(0);
+    Control.Wait(0);
+    Forever
+    {
+        Call Speed;
+        If (hp < 1)
+        {
+            hp = 0;
+            Event.Broadcast("Game Over");
+            Sound.Play(Game Over);
+            Looks.SwitchCostumeTo(aw);
+            Motion.GoToXY(0, 0);
+            Looks.Show();
+            Stop(this script);
+        }
+    }
+}
+
+
+//----- Start as clone ------------------------------------------------------------------------------------------------
+
+Control.WhenIStartAsClone()
+{
+    Looks.Show();
+    Repeat (20)
+    {
+        Motion.ChangeYBy(7);
+        Looks.ChangeEffectBy(GHOST, 5);
+    }
+    Control.DeleteThisClone();
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define Speed (warp=true)
+{
+    If (List.Length(Pending Text) > 1)
+    {
+        Looks.SetEffectTo(COLOR, Pending Text[1]);
+        Motion.GoToXY((-17.5 - (Variable.Length(Pending Text[2]) * 7.5)), -100);
+        count = 0;
+        Repeat (Variable.Length(Pending Text[2]))
+        {
+            count += 1;
+            Motion.ChangeXBy(15);
+            Looks.SwitchCostumeTo(Operator.LetterOf(Pending Text[2], count));
+            Control.CreateCloneOf(_myself_);
+        }
+    }
+    List.DeleteItem(Pending Text, 1);
+    List.DeleteItem(Pending Text, 1);
+}
+
+
+//----- Orphaned blocks -----------------------------------------------------------------------------------------------
+
+Event.Broadcast("beat game");
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+-.svg
+0.svg
+1.svg
+2.svg
+3.svg
+4.svg
+5.svg
+6.svg
+7.svg
+8.svg
+9.svg
+aw.svg
+L.svg
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+Game Over.wav

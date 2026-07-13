@@ -1,0 +1,152 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+counter = 2
+
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    Forever
+    {
+        Event.Broadcast("clear text");
+        Looks.SetSizeTo(100);
+        Looks.Hide();
+        Looks.SetEffectTo(BRIGHTNESS, 100);
+        Motion.GoToXY(-220, 165);
+        Call Write(Operator.Join("L ", level));
+        Motion.GoToXY(-130, 165);
+        If (hp < (max hp / 3))
+        {
+            Looks.SetEffectTo(COLOR, 0);
+            Looks.SetEffectTo(BRIGHTNESS, 0);
+        }
+        Else
+        {
+            Looks.SetEffectTo(BRIGHTNESS, 100);
+        }
+        Call Write(Operator.Join("H ", Operator.Join(hp, Operator.Join("/", max hp))));
+        Looks.SetEffectTo(BRIGHTNESS, 100);
+        Motion.GoToXY((240 - (Variable.Length(Operator.Join(money, "G")) * 13)), 165);
+        Looks.SetEffectTo(COLOR, 30);
+        Looks.SetEffectTo(BRIGHTNESS, 0);
+        Call Write(Operator.Join(money, "G"));
+        Looks.SetSizeTo(100);
+        Looks.SetEffectTo(BRIGHTNESS, 99);
+        Motion.GoToXY(-190, -90);
+        Call Write(Operator.Join("x", potions[1]));
+        Motion.GoToXY(-190, -125);
+        Call Write(Operator.Join("x", potions[2]));
+        Motion.GoToXY(-190, -160);
+        Call Write(Operator.Join("x", potions[3]));
+        Motion.GoToXY(-228, 138);
+    }
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(clear text)
+{
+    Control.DeleteThisClone();
+}
+
+WhenBroadcastReceived(paint)
+{
+    Pen.SetPenSizeTo(1);
+    Motion.GoToXY(-230, 150);
+    Call Spawn bar;
+    Motion.GoToXY(-142, 150);
+    Call Spawn health;
+    Motion.GoToXY(-231, 149);
+    Call Spawn bar;
+    Motion.GoToXY(-143, 149);
+    Call Spawn health;
+    Motion.GoToXY(-232, 148);
+    Call Spawn bar;
+    Motion.GoToXY(-144, 148);
+    Call Spawn health;
+}
+
+
+//----- Start as clone ------------------------------------------------------------------------------------------------
+
+Control.WhenIStartAsClone()
+{
+    Looks.Show();
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define Spawn bar (warp=true)
+{
+    If (level < 60)
+    {
+        Pen.SetPenColorToColor(#00313e);
+        Pen.Down();
+        Motion.ChangeXBy(55);
+        Motion.ChangeXBy(-55);
+        Pen.Clear();
+        Pen.SetPenColorToColor(#1af3ff);
+        If ((((exp - total exp[level]) / (total exp[(level + 1)] - total exp[level])) < 1) And ((exp - total exp[level]) > 0))
+        {
+            Pen.Down();
+            Motion.ChangeXBy((((exp - total exp[level]) / (total exp[(level + 1)] - total exp[level])) * 55));
+            Pen.Clear();
+        }
+    }
+}
+
+Define Spawn health (warp=true)
+{
+    Pen.SetPenColorToColor(#00ff1a);
+    Pen.SetPenTo(color, ((hp / max hp) * 35));
+    Pen.Down();
+    Motion.ChangeXBy(hp);
+    If (hp < max hp)
+    {
+        Pen.SetPenColorToColor(#4a3a3a);
+        Motion.ChangeXBy((max hp - hp));
+    }
+    Pen.Clear();
+}
+
+Define Write(string text) (warp=true)
+{
+    counter = 0;
+    Repeat (Variable.Length(text))
+    {
+        counter += 1;
+        Looks.SwitchCostumeTo(Operator.LetterOf(text, counter));
+        Control.CreateCloneOf(_myself_);
+        Motion.ChangeXBy((0.12 * Looks.Size()));
+    }
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+ .svg
+-.svg
+/.svg
+0.svg
+1.svg
+2.svg
+3.svg
+4.svg
+5.svg
+6.svg
+7.svg
+8.svg
+9.svg
+G.svg
+H.svg
+L.svg
+x.svg
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

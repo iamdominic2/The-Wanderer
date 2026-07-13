@@ -1,0 +1,241 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+angry = 0
+distance = 0
+height = 0
+myhp = 0
+myhp = 25
+scan lines = 0
+textstone = 7
+type = 0
+type = x
+vx = 0
+vx = 9.1195762514616
+vy = 0
+vy = 17.453496325971
+x = 0
+
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    Looks.SetEffectTo(GHOST, 100);
+    Looks.SetSizeTo(450);
+    Motion.GoToXY(0, -50);
+    type = "x";
+    cooldown = 0;
+    myhp = 25;
+    List.DeleteAll(potions);
+    List.Add(potions, 0);
+    List.Add(potions, 0);
+    List.Add(potions, 0);
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(entity tick)
+{
+    If (Not ((type == "x")))
+    {
+        vx = (Motion.XPosition() - Sensing.Of(x position, Player));
+        vy = (Motion.YPosition() - Sensing.Of(y position, Player));
+        Call Rotate View(vx)(vy);
+    }
+}
+
+WhenBroadcastReceived(Lcoation Change)
+{
+    Repeat (1)
+    {
+        Control.DeleteThisClone();
+    }
+    If (Location == 2)
+    {
+        Call Spawn(36) at(-70)(0);
+        Call Spawn(37) at(-50)(0);
+    }
+    If (Location == 4)
+    {
+        Call Spawn(36) at(36)(27);
+        Call Spawn(36) at(-20)(-145);
+        Call Spawn(37) at(-70)(155);
+        Call Spawn(36) at(60)(90);
+        Call Spawn(39) at(230)(150);
+    }
+    If (Location == 5)
+    {
+        Call Spawn(37) at(29)(82);
+        Call Spawn(36) at(130)(45);
+        Call Spawn(37) at(140)(-155);
+    }
+    If (Location == 8)
+    {
+        Call Spawn(38) at(-222)(1);
+        Call Spawn(38) at(-191)(157);
+        Call Spawn(40) at(86)(35);
+        Call Spawn(55) at(137)(79);
+        Call Spawn(53) at(35)(-150);
+    }
+    If (Location == 10)
+    {
+        Call Spawn(36) at(-230)(-55);
+        Call Spawn(36) at(70)(90);
+    }
+    If (Location == 11)
+    {
+        Call Spawn(37) at(-70)(0);
+        Call Spawn(38) at(-50)(0);
+        If (Not (List.ContainsItem(Key Items, 56)))
+        {
+            Call Spawn(56) at(-70)(25);
+        }
+        If (Not (List.ContainsItem(Key Items, 57)))
+        {
+            Call Spawn(57) at(-50)(25);
+        }
+    }
+    If (Location == 12)
+    {
+        Call Spawn(38) at(-145)(0);
+        Call Spawn(37) at(164)(132);
+        Call Spawn(38) at(0)(38);
+    }
+    If (Location == 13)
+    {
+        Call Spawn(38) at(-200)(80);
+        Call Spawn(38) at(0)(-60);
+    }
+    If (Location == 14)
+    {
+        Call Spawn(41) at(-210)(100);
+        Call Spawn(54) at(-210)(75);
+        textstone = 1;
+        Call Spawn(58) at(-142)(145);
+        textstone += 1;
+        Call Spawn(58) at(180)(115);
+        textstone += 1;
+        Call Spawn(58) at(6)(103);
+        textstone += 1;
+        Call Spawn(58) at(-100)(100);
+        textstone += 1;
+        Call Spawn(58) at(-114)(42);
+        textstone += 1;
+        Call Spawn(58) at(-180)(101);
+        textstone += 1;
+        Call Spawn(58) at(210)(85);
+    }
+}
+
+
+//----- Start as clone ------------------------------------------------------------------------------------------------
+
+Control.WhenIStartAsClone()
+{
+    If List.ContainsItem(collected items, Operator.Join(Operator.Join(Motion.XPosition(), Motion.YPosition()), Location))
+    {
+        Control.DeleteThisClone();
+    }
+    Forever
+    {
+        Looks.SetSizeTo(500);
+        If (Sensing.TouchingObject(Player) And (type < 58))
+        {
+            If ((Location == 2) Or (Location == 11))
+            {
+                If (Sensing.KeyPressed(e) And (money > (cost[(type - 35)] - 1)))
+                {
+                    Sound.Play(Coin);
+                    If (type < 39)
+                    {
+                        List.ReplaceItem(potions, (type - 35), (potions[(type - 35)] + 1));
+                    }
+                    Else
+                    {
+                        List.Add(Key Items, type);
+                    }
+                    money += (-1 * cost[(type - 35)]);
+                    Control.DeleteThisClone();
+                }
+            }
+            Else
+            {
+                Sound.Play(Coin);
+                List.Add(collected items, Operator.Join(Operator.Join(Motion.XPosition(), Motion.YPosition()), Location));
+                If (type < 39)
+                {
+                    List.ReplaceItem(potions, (type - 35), (potions[(type - 35)] + 1));
+                }
+                Else
+                {
+                    List.Add(Key Items, type);
+                }
+                Control.DeleteThisClone();
+            }
+        }
+        If (type == 58)
+        {
+            If (Sensing.TouchingObject(Player) And Sensing.KeyPressed(e))
+            {
+                text = (textstone + 45);
+                text cooldown = 24;
+            }
+        }
+        Else
+        {
+            If Sensing.TouchingObject(Player)
+            {
+                text = ((type - 34) + ((type > 50) * 19));
+                text cooldown = 4;
+            }
+        }
+    }
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define Draw(string type) at x(string x) dist(string dist) (warp=true)
+{
+    Repeat Until (DRAW DIST[(DRAW IDX - 1)] > dist)
+    {
+        DRAW IDX += -1;
+    }
+    Repeat Until (DRAW DIST[DRAW IDX] < dist)
+    {
+        DRAW IDX += 1;
+    }
+    List.InsertItem(DRAW TYPE, DRAW IDX, type);
+    List.InsertItem(DRAW X, DRAW IDX, x);
+    List.InsertItem(DRAW DIST, DRAW IDX, dist);
+}
+
+Define Rotate View(string vx)(string vy) (warp=false)
+{
+    vx = ((vx * cos(Sensing.Of(direction, Player))) - (vy * sin(Sensing.Of(direction, Player))));
+    vy = ((vx * sin(Sensing.Of(direction, Player))) + (vy * cos(Sensing.Of(direction, Player))));
+    If (vy > 0)
+    {
+        Call Draw(type) at x((vx * (DV / vy))) dist(vy);
+    }
+}
+
+Define Spawn(string type) at(string x)(string y) (warp=false)
+{
+    Motion.GoToXY(x, y);
+    type = type;
+    Control.CreateCloneOf(_myself_);
+    type = "x";
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+costume1.png
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+Coin.wav

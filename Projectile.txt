@@ -1,0 +1,120 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+angry = 0
+identity = 8
+myhp = 0
+type = 0
+type = 1
+vx = 0
+vx = 5.4375217374792
+vy = -60.882972648202
+vy = 0
+
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    Looks.SetEffectTo(GHOST, 100);
+    Looks.Hide();
+    type = "x";
+    Forever
+    {
+        If (List.Length(projectile) > 1)
+        {
+            Motion.GoToXY(projectile[1], projectile[2]);
+            identity = projectile[3];
+            type = enemy projectile[projectile[3]];
+            Control.CreateCloneOf(_myself_);
+            List.DeleteItem(projectile, 1);
+            List.DeleteItem(projectile, 1);
+            List.DeleteItem(projectile, 1);
+        }
+    }
+}
+
+WhenGreenFlagClicked()
+{
+    List.DeleteAll(projectile);
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(entity tick)
+{
+    If (Not ((type == "x")))
+    {
+        vx = (Motion.XPosition() - Sensing.Of(x position, Player));
+        vy = (Motion.YPosition() - Sensing.Of(y position, Player));
+        Call Rotate View(vx)(vy);
+        Motion.Move(2.5);
+        If (Sensing.TouchingObject(Player) And (cooldown < 1))
+        {
+            Sound.Play(1_);
+            dmg = Operator.Round((Operator.Random(-0.8 , -0.64) * (((((Operator.Join(Operator.LetterOf(enemystatsAADDHHH[identity], 1), Operator.LetterOf(enemystatsAADDHHH[identity], 2)) * 2) - (((level * 1.25) + shield bonus[shield]) + var d)) * (Operator.Join(Operator.LetterOf(enemystatsAADDHHH[identity], 1), Operator.LetterOf(enemystatsAADDHHH[identity], 2)) > (((level * 1.25) + shield bonus[shield]) + var d))) + (((Operator.Join(Operator.LetterOf(enemystatsAADDHHH[identity], 1), Operator.LetterOf(enemystatsAADDHHH[identity], 2)) * Operator.Join(Operator.LetterOf(enemystatsAADDHHH[identity], 1), Operator.LetterOf(enemystatsAADDHHH[identity], 2))) / (((level * 1.25) + shield bonus[shield]) + var d)) * (Not ((Operator.Join(Operator.LetterOf(enemystatsAADDHHH[identity], 1), Operator.LetterOf(enemystatsAADDHHH[identity], 2)) > (((level * 1.25) + shield bonus[shield]) + var d)))))) + 1)));
+            List.Add(Pending Text, -25);
+            List.Add(Pending Text, dmg);
+            hp += dmg;
+            cooldown = 17;
+            Control.DeleteThisClone();
+        }
+        If (Sensing.TouchingObject(Walls) Or Sensing.TouchingObject(_edge_))
+        {
+            Control.DeleteThisClone();
+        }
+    }
+}
+
+WhenBroadcastReceived(Lcoation Change)
+{
+    Control.DeleteThisClone();
+}
+
+
+//----- Start as clone ------------------------------------------------------------------------------------------------
+
+Control.WhenIStartAsClone()
+{
+    Motion.PointTowards(Player);
+    Looks.Show();
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define Draw(string type) at x(string x) dist(string dist) (warp=true)
+{
+    Repeat Until (DRAW DIST[(DRAW IDX - 1)] > dist)
+    {
+        DRAW IDX += -1;
+    }
+    Repeat Until (DRAW DIST[DRAW IDX] < dist)
+    {
+        DRAW IDX += 1;
+    }
+    List.InsertItem(DRAW TYPE, DRAW IDX, type);
+    List.InsertItem(DRAW X, DRAW IDX, x);
+    List.InsertItem(DRAW DIST, DRAW IDX, dist);
+}
+
+Define Rotate View(string vx)(string vy) (warp=false)
+{
+    vx = ((vx * cos(Sensing.Of(direction, Player))) - (vy * sin(Sensing.Of(direction, Player))));
+    vy = ((vx * sin(Sensing.Of(direction, Player))) + (vy * cos(Sensing.Of(direction, Player))));
+    If (vy > 0)
+    {
+        Call Draw((type + 46)) at x((vx * (DV / vy))) dist(vy);
+    }
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+costume1.png
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+1_.wav

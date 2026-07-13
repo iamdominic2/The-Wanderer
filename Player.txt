@@ -1,0 +1,286 @@
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    FOV = 80;
+    RES = 4;
+    Sound.StopAllSounds();
+    Location = 10;
+    Looks.SetSizeTo(255);
+    Motion.PointInDirection(0);
+    Looks.SetEffectTo(GHOST, 100);
+    Motion.GoToXY(-230, -175);
+    Forever
+    {
+        fps = 30;
+        Sensing.ResetTimer();
+        Call Intialise Raycaster;
+        If (((((text < 10) Or (text > 20)) And (text < 23)) Or (text > 34)) Or (text cooldown < 1))
+        {
+            Call Player Tick;
+        }
+        Pen.Clear();
+        Event.Broadcast("raycast");
+        Event.Broadcast("entity tick");
+        cooldown += -1;
+        Event.Broadcast("paint");
+    }
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(Game Over)
+{
+    Stop(other scripts in sprite);
+}
+
+WhenBroadcastReceived(xx)
+{
+    Motion.GoToXY(0, -35);
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define Intialise Raycaster (warp=true)
+{
+    DV = (240 / tan((FOV / 2)));
+    List.DeleteAll(DRAW DIST);
+    List.DeleteAll(DRAW X);
+    List.DeleteAll(DRAW TYPE);
+    List.Add(DRAW DIST, 99999999);
+    List.Add(DRAW TYPE, "");
+    List.Add(DRAW X, "");
+    DRAW IDX = 2;
+}
+
+Define Location xy(string x)(string y) location(string l) music(string m) (warp=false)
+{
+    Location = l;
+    If (Not ((Music == m)))
+    {
+        Sound.StopAllSounds();
+    }
+    Music = m;
+    Motion.GoToXY(x, y);
+    Event.Broadcast("Lcoation Change");
+}
+
+Define Move(string steps) (warp=false)
+{
+    Call Try move((sin(Motion.Direction()) * steps))(0);
+    Call Try move(0)((cos(Motion.Direction()) * steps));
+}
+
+Define Player Tick (warp=false)
+{
+    If Sensing.KeyPressed(right arrow)
+    {
+        Motion.TurnRight(((3 / fps) * 30));
+    }
+    If Sensing.KeyPressed(left arrow)
+    {
+        Motion.TurnLeft(((3 / fps) * 30));
+    }
+    If (Sensing.KeyPressed(up arrow) Or Sensing.KeyPressed(w))
+    {
+        Call Move((((1.25 * ((List.ContainsItem(Key Items, 56) / 5) + 1)) / fps) * 30));
+    }
+    If (Sensing.KeyPressed(down arrow) Or Sensing.KeyPressed(s))
+    {
+        Call Move((((-0.75 * ((List.ContainsItem(Key Items, 56) / 5) + 1)) / fps) * 30));
+    }
+    If Sensing.KeyPressed(a)
+    {
+        Motion.TurnLeft(90);
+        Call Move((((1 * ((List.ContainsItem(Key Items, 56) / 5) + 1)) / fps) * 30));
+        Motion.TurnRight(90);
+    }
+    If Sensing.KeyPressed(d)
+    {
+        Motion.TurnRight(90);
+        Call Move((((1 * ((List.ContainsItem(Key Items, 56) / 5) + 1)) / fps) * 30));
+        Motion.TurnLeft(90);
+    }
+    If ((Sensing.TouchingObject(Teleporter) And (Motion.YPosition() > 80)) And (Location == 1))
+    {
+        If (Motion.XPosition() < 0)
+        {
+            text = 1;
+            text cooldown = 30;
+        }
+        Call Location xy(-80)(-35) location(((Motion.XPosition() > 0) + 2)) music(((Motion.XPosition() > 0) + 13));
+    }
+    Else
+    {
+        If (Sensing.TouchingObject(Teleporter) And (Location == 1))
+        {
+            If (Motion.YPosition() > -80)
+            {
+                If (Motion.XPosition() > 0)
+                {
+                    Call Location xy(-200)(-35) location(4) music(2);
+                }
+                Else
+                {
+                    Call Location xy(225)(-35) location(8) music(5);
+                }
+            }
+        }
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 2))
+    {
+        Call Location xy(-100)(100) location(1) music(1);
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 3))
+    {
+        Call Location xy(90)(100) location(1) music(1);
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 4))
+    {
+        If (Motion.XPosition() > 1)
+        {
+            Call Location xy(-223)(-50) location(5) music(3);
+        }
+        Else
+        {
+            Call Location xy(215)(-40) location(1) music(1);
+        }
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 5))
+    {
+        If (Motion.XPosition() < 0)
+        {
+            Call Location xy(220)(-40) location(4) music(2);
+        }
+        Else
+        {
+            Call Location xy(-200)(0) location(6) music(4);
+        }
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 6))
+    {
+        Call Location xy(0)(0) location(7) music(3);
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 7))
+    {
+        Call Location xy(220)(-40) location(4) music(2);
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 8))
+    {
+        If (Motion.XPosition() < 55)
+        {
+            Call Location xy(-50)(160) location(9) music(6);
+        }
+        Else
+        {
+            Call Location xy(-210)(-35) location(1) music(1);
+        }
+    }
+    If ((Motion.XPosition() < -142) And ((Location == 1) And (Not (List.ContainsItem(defeated, 33)))))
+    {
+        Motion.SetX(-142);
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 10))
+    {
+        Call Location xy(0)(-85) location(1) music(1);
+        Motion.PointInDirection(0);
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 9))
+    {
+        If (Motion.YPosition() > 122)
+        {
+            Call Location xy(-42)(-165) location(8) music(5);
+        }
+        Else
+        {
+            If (Motion.YPosition() < -123)
+            {
+                Call Location xy(0)(170) location(12) music(7);
+            }
+            Else
+            {
+                Call Location xy(-80)(-20) location(11) music(13);
+            }
+        }
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 11))
+    {
+        Call Location xy(90)(5) location(9) music(6);
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 12))
+    {
+        If (Motion.YPosition() > 0)
+        {
+            Call Location xy(-43)(-159) location(9) music(6);
+        }
+        Else
+        {
+            Call Location xy(-200)(165) location(13) music(8);
+        }
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 13))
+    {
+        If (Motion.YPosition() > 0)
+        {
+            Call Location xy(2)(-135) location(12) music(7);
+        }
+        Else
+        {
+            Call Location xy(-185)(156) location(14) music(9);
+        }
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 14))
+    {
+        If (Motion.YPosition() > 0)
+        {
+            Call Location xy(-100)(-160) location(13) music(8);
+        }
+        Else
+        {
+            Call Location xy(225)(165) location(15) music(10);
+        }
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 15))
+    {
+        If (Motion.YPosition() > 0)
+        {
+            Call Location xy(200)(-160) location(14) music(9);
+        }
+        Else
+        {
+            Call Location xy(5)(-125) location(16) music(11);
+        }
+    }
+    If (Sensing.TouchingObject(Teleporter) And (Location == 16))
+    {
+        Call Location xy(0)(-25) location(17) music(24);
+    }
+}
+
+Define Try move(string dx)(string dy) (warp=false)
+{
+    Motion.ChangeXBy(dx);
+    Motion.ChangeYBy(dy);
+    If Sensing.TouchingObject(Walls)
+    {
+        Motion.ChangeXBy((-1 * dx));
+        Motion.ChangeYBy((-1 * dy));
+    }
+}
+
+
+//----- Orphaned blocks -----------------------------------------------------------------------------------------------
+
+Call Location xy(25)(-165) location(16) music(11);
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+costume1.png
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

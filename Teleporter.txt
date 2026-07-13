@@ -1,0 +1,71 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+angry = 0
+count = 0
+myhp = 0
+type = 0
+vx = 0
+vy = 0
+
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    Looks.SetEffectTo(BRIGHTNESS, 100);
+    Looks.SwitchCostumeTo(costume1);
+    Looks.SetEffectTo(GHOST, 100);
+    Motion.GoToXY(0, 0);
+    Forever
+    {
+        Looks.SwitchCostumeTo(Location);
+        Looks.Show();
+        If ((Not (List.ContainsItem(defeated, 33))) And (Location == 6))
+        {
+            Looks.Hide();
+        }
+        If ((Not (List.ContainsItem(Key Items, 52))) And (Location == 7))
+        {
+            Looks.Hide();
+        }
+        If ((enemies defeated on 16 < 5) And (Location == 16))
+        {
+            Looks.Hide();
+        }
+    }
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(Game Over)
+{
+    Stop(other scripts in sprite);
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+costume1.svg
+costume2.svg
+costume3.svg
+costume4.svg
+costume5.svg
+costume6.svg
+costume7.svg
+costume8.svg
+costume9.svg
+costume10.svg
+costume11.svg
+costume12.svg
+costume13.svg
+costume14.svg
+costume15.svg
+costume16.svg
+costume17.svg
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

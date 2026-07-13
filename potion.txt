@@ -1,0 +1,44 @@
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    Call ok;
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(Game Over)
+{
+    Looks.Hide();
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define ok (warp=true)
+{
+    Motion.GoToXY(-220, -90);
+    Looks.Show();
+    Looks.SwitchCostumeTo(costume1);
+    Repeat (3)
+    {
+        Control.CreateCloneOf(_myself_);
+        Looks.ChangeEffectBy(COLOR, 50);
+        Motion.ChangeYBy(-35);
+        Looks.NextCostume();
+    }
+    Looks.Hide();
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+costume1.svg
+costume2.svg
+costume3.svg
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

@@ -1,0 +1,417 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+angry = 0
+myhp = 7
+type = x
+vx = 28.089445665471
+vy = 49.344681970299
+
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    Looks.SetEffectTo(GHOST, 100);
+    Looks.SetSizeTo(300);
+    Motion.GoToXY(0, -50);
+    type = "x";
+    cooldown = 0;
+    List.DeleteAll(defeated);
+    text = 0;
+    Forever
+    {
+        If (((text == 8) And (text cooldown == 0)) And (Not (List.ContainsItem(Key Items, 52))))
+        {
+            text = 9;
+            text cooldown = 36;
+            Sound.Play(Coin);
+            List.Add(Key Items, 52);
+        }
+    }
+}
+
+WhenGreenFlagClicked()
+{
+    Call Spawn(46) at(-147)(-32);
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(entity tick)
+{
+    If (Not ((type == "x")))
+    {
+        vx = (Motion.XPosition() - Sensing.Of(x position, Player));
+        vy = (Motion.YPosition() - Sensing.Of(y position, Player));
+        Call Rotate View(vx)(vy);
+        If (((Sensing.TouchingObject(Player Attack) And (attacking == 1)) And (Not (((type < 3) Or (type > 34))))) And (Not (((arrow == 2) And ((type == 31) Or (type == 32))))))
+        {
+            angry = 1;
+            If (arrow == 2)
+            {
+                weapon = 5;
+            }
+            dmg = Operator.Round(((Operator.Random(-0.8 , -1) * (((((((level + weapon bonus[weapon]) + var a) * 2) - Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 3), Operator.LetterOf(enemystatsAADDHHH[type], 4))) * (((level + weapon bonus[weapon]) + var a) > Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 3), Operator.LetterOf(enemystatsAADDHHH[type], 4)))) + (((((level + weapon bonus[weapon]) + var a) * ((level + weapon bonus[weapon]) + var a)) / Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 3), Operator.LetterOf(enemystatsAADDHHH[type], 4))) * (Not ((((level + weapon bonus[weapon]) + var a) > Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 3), Operator.LetterOf(enemystatsAADDHHH[type], 4))))))) + 1)) / ((arrow / 3) + 0.67)));
+            If (type == 9)
+            {
+                If (weapon < 5)
+                {
+                    List.Add(Pending Text, -25);
+                    List.Add(Pending Text, -3);
+                    Sound.Play(1_);
+                    hp += -3;
+                }
+            }
+            List.Add(Pending Text, 1);
+            List.Add(Pending Text, dmg);
+            myhp += dmg;
+            If (myhp < 0)
+            {
+                Sound.Play(dead);
+                to gain exp += Operator.Round(Operator.Round(((List.ContainsItem(Key Items, 57) + 1) * Operator.Round(((Operator.Round(((((enemy projectile[type] > "") / 2) + 1) * (Operator.Round((((Not (((type < 3) Or (type > 35)))) * Operator.Round(((ln(Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 1), Operator.LetterOf(enemystatsAADDHHH[type], 2))) * e ^(log((Operator.LetterOf(enemystatsAADDHHH[type], 1) + 7)))) * sqrt(sqrt((Operator.Join(Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 5), Operator.LetterOf(enemystatsAADDHHH[type], 6)), Operator.LetterOf(enemystatsAADDHHH[type], 7)) * (Operator.Join(Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 5), Operator.LetterOf(enemystatsAADDHHH[type], 6)), Operator.LetterOf(enemystatsAADDHHH[type], 7)) * Operator.Join(Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 5), Operator.LetterOf(enemystatsAADDHHH[type], 6)), Operator.LetterOf(enemystatsAADDHHH[type], 7))))))))) * (((type > 32) * 3) + 1))) + ((((type > 32) * 3) + 1) + ((type == 34) * 68))))) + 0) / 2)))));
+                money += (Operator.Round((((sqrt(Operator.Join(Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 5), Operator.LetterOf(enemystatsAADDHHH[type], 6)), Operator.LetterOf(enemystatsAADDHHH[type], 7))) + 1) * 100) / 100)) + (type < 6));
+                enemies defeated on 16 += (Location == 16);
+                List.Add(Pending Text, 100);
+                List.Add(Pending Text, Operator.Round(Operator.Round(((List.ContainsItem(Key Items, 57) + 1) * Operator.Round(((Operator.Round(((((enemy projectile[type] > "") / 2) + 1) * (Operator.Round((((Not (((type < 3) Or (type > 35)))) * Operator.Round(((ln(Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 1), Operator.LetterOf(enemystatsAADDHHH[type], 2))) * e ^(log((Operator.LetterOf(enemystatsAADDHHH[type], 1) + 7)))) * sqrt(sqrt((Operator.Join(Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 5), Operator.LetterOf(enemystatsAADDHHH[type], 6)), Operator.LetterOf(enemystatsAADDHHH[type], 7)) * (Operator.Join(Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 5), Operator.LetterOf(enemystatsAADDHHH[type], 6)), Operator.LetterOf(enemystatsAADDHHH[type], 7)) * Operator.Join(Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 5), Operator.LetterOf(enemystatsAADDHHH[type], 6)), Operator.LetterOf(enemystatsAADDHHH[type], 7))))))))) * (((type > 32) * 3) + 1))) + ((((type > 32) * 3) + 1) + ((type == 34) * 68))))) + 0) / 2))))));
+                List.Add(defeated, type);
+                Control.DeleteThisClone();
+            }
+        }
+        If ((angry == 1) Or (Not (((type < 3) Or (type > 34)))))
+        {
+            If (Sensing.TouchingObject(Player) And (cooldown < 0))
+            {
+                Sound.Play(1_);
+                dmg = Operator.Round((Operator.Random(-1 , -0.8) * (((((Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 1), Operator.LetterOf(enemystatsAADDHHH[type], 2)) * 2) - ((level + shield bonus[shield]) + var d)) * (Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 1), Operator.LetterOf(enemystatsAADDHHH[type], 2)) > ((level + shield bonus[shield]) + var d))) + (((Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 1), Operator.LetterOf(enemystatsAADDHHH[type], 2)) * Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 1), Operator.LetterOf(enemystatsAADDHHH[type], 2))) / ((level + shield bonus[shield]) + var d)) * (Not ((Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 1), Operator.LetterOf(enemystatsAADDHHH[type], 2)) > ((level + shield bonus[shield]) + var d)))))) + 1)));
+                List.Add(Pending Text, -25);
+                List.Add(Pending Text, dmg);
+                hp += dmg;
+                cooldown = 20;
+            }
+        }
+        If ((((angry == 0) And (((type < 3) Or (type > 41)) Or (type == 35))) And (Sensing.TouchingObject(Player) And Sensing.KeyPressed(e))) And (Interactable character == 0))
+        {
+            If (type == 35)
+            {
+                Event.Broadcast("beat game");
+                Event.Broadcast("Game Over");
+            }
+            Else
+            {
+                text = 1;
+                text cooldown = 36;
+                If (type > 35)
+                {
+                    text = text type[(type - 41)];
+                }
+                If (type == 1)
+                {
+                    text = (((Location == 3) * 2) + 8);
+                }
+                If (type == 2)
+                {
+                    text = 5;
+                }
+            }
+        }
+        If ((text == 23) And (text cooldown == 0))
+        {
+            Event.Broadcast("Bungee Jumping");
+        }
+        If ((text == 10) And (text cooldown == 0))
+        {
+            Event.Broadcast("Resturant: Order");
+        }
+        If ((text == 9) And (text cooldown == 0))
+        {
+            Control.DeleteThisClone();
+        }
+        Motion.PointTowards(Player);
+        Motion.TurnRight((((type == 22) Or (type == 23)) * 36));
+        If ((angry == 1) Or (type > 2))
+        {
+            If ((((Sensing.DistanceTo(Player) < (90 / ((Location == 1) + 1))) And (Sensing.DistanceTo(Player) > 2)) Or (angry == 1)) And (cooldown < 9))
+            {
+                Call Move(((Monster Speed[type] / fps) * 28));
+            }
+        }
+        If ((enemy projectile[type] > "") And (Operator.Random(1 , 72) == 1))
+        {
+            List.Add(projectile, Motion.XPosition());
+            List.Add(projectile, Motion.YPosition());
+            List.Add(projectile, type);
+        }
+    }
+}
+
+WhenBroadcastReceived(Lcoation Change)
+{
+    Repeat (1)
+    {
+        Control.DeleteThisClone();
+    }
+    If (Location == 1)
+    {
+        Call Spawn(46) at(-147)(-32);
+    }
+    If (Location == 2)
+    {
+        Call Spawn(2) at(-100)(-30);
+        Call Spawn(45) at(-16)(48);
+    }
+    If (Location == 11)
+    {
+        Call Spawn(2) at(-100)(-30);
+    }
+    If ((Location == 3) And List.ContainsItem(Key Items, 52))
+    {
+        Call Spawn(1) at(-100)(-30);
+    }
+    If (Location == 4)
+    {
+        Call Spawn(15) at(-185)(-31);
+        Call Spawn(3) at(-182)(-88);
+        Call Spawn(15) at(-182)(-115);
+        Call Spawn(18) at(-69)(-165);
+        Call Spawn(18) at(-19)(-139);
+        Call Spawn(18) at(155)(140);
+        Call Spawn(10) at(-69)(136);
+        Call Spawn(20) at(6)(129);
+        Call Spawn(16) at(200)(-40);
+        Call Spawn(4) at(116)(16);
+        Call Spawn(20) at(32)(30);
+        Call Spawn(3) at(110)(-40);
+        Call Spawn(3) at(66)(-93);
+        Call Spawn(42) at(215)(150);
+    }
+    If (Location == 5)
+    {
+        Call Spawn(4) at(-191)(77);
+        Call Spawn(16) at(-193)(27);
+        Call Spawn(16) at(209)(108);
+        Call Spawn(28) at(-29)(100);
+        Call Spawn(22) at(-16)(148);
+        Call Spawn(22) at(40)(50);
+        Call Spawn(9) at(-132)(88);
+        Call Spawn(9) at(-66)(55);
+        Call Spawn(9) at(-79)(87);
+        Call Spawn(26) at(-134)(27);
+        Call Spawn(26) at(-113)(-144);
+        Call Spawn(28) at(-56)(-98);
+        Call Spawn(9) at(46)(-102);
+        Call Spawn(13) at(206)(101);
+        Call Spawn(13) at(138)(93);
+        Call Spawn(16) at(200)(0);
+        Call Spawn(6) at(-28)(-19);
+        Call Spawn(28) at(-44)(-154);
+        Call Spawn(10) at(116)(20);
+        Call Spawn(6) at(207)(-35);
+        Call Spawn(22) at(-133)(150);
+        Call Spawn(22) at(26)(14);
+        Call Spawn(24) at(211)(-119);
+        Call Spawn(13) at(180)(11);
+    }
+    If (Location == 6)
+    {
+        If (Not (List.ContainsItem(defeated, 33)))
+        {
+            Call Spawn(33) at(-70)(0);
+        }
+    }
+    If (Location == 7)
+    {
+        If (Not (List.ContainsItem(Key Items, 52)))
+        {
+            Call Spawn(1) at(23)(1);
+        }
+    }
+    If (Location == 8)
+    {
+        Call Spawn(43) at(130)(95);
+        Call Spawn(24) at(138)(38);
+        Call Spawn(11) at(138)(-68);
+        Call Spawn(12) at(86)(-12);
+        Call Spawn(31) at(9)(41);
+        Call Spawn(14) at(138)(69);
+        Call Spawn(12) at(34)(138);
+        Call Spawn(14) at(-201)(166);
+        Call Spawn(24) at(66)(89);
+        Call Spawn(14) at(-149)(16);
+        Call Spawn(23) at(-221)(-32);
+        Call Spawn(23) at(-221)(-116);
+        Call Spawn(21) at(9)(-146);
+        Call Spawn(31) at(-53)(-60);
+        Call Spawn(27) at(8)(-141);
+    }
+    If (Location == 9)
+    {
+        Call Spawn(44) at(-125)(5);
+    }
+    If (Location == 10)
+    {
+        Call Spawn(18) at(-125)(165);
+        Call Spawn(15) at(-60)(165);
+        Call Spawn(3) at(61)(90);
+        Call Spawn(15) at(75)(165);
+    }
+    If (Location == 12)
+    {
+        Call Spawn(14) at(4)(131);
+        Call Spawn(23) at(59)(135);
+        Call Spawn(14) at(-71)(139);
+        Call Spawn(29) at(-150)(137);
+        Call Spawn(31) at(-156)(89);
+        Call Spawn(12) at(-154)(6);
+        Call Spawn(21) at(-103)(89);
+        Call Spawn(27) at(-48)(78);
+        Call Spawn(23) at(-48)(0);
+        Call Spawn(14) at(-103)(9);
+        Call Spawn(23) at(6)(-50);
+        Call Spawn(14) at(-52)(-92);
+        Call Spawn(29) at(-137)(-90);
+        Call Spawn(31) at(-113)(-135);
+        Call Spawn(12) at(66)(-92);
+        Call Spawn(21) at(69)(-134);
+        Call Spawn(27) at(173)(-104);
+        Call Spawn(23) at(100)(-53);
+        Call Spawn(23) at(167)(38);
+        Call Spawn(23) at(60)(50);
+        Call Spawn(21) at(110)(95);
+        Call Spawn(31) at(116)(42);
+        Call Spawn(27) at(169)(135);
+    }
+    If (Location == 16)
+    {
+        Call Spawn(34) at(5)(-55);
+        Call Spawn(8) at(-40)(-30);
+        Call Spawn(8) at(50)(-30);
+        Call Spawn(8) at(-40)(-80);
+        Call Spawn(8) at(50)(-80);
+    }
+    If (Location == 13)
+    {
+        Call Spawn(29) at(-196)(155);
+        Call Spawn(27) at(-100)(155);
+        Call Spawn(29) at(75)(155);
+        Call Spawn(19) at(111)(155);
+        Call Spawn(17) at(218)(140);
+        Call Spawn(19) at(111)(127);
+        Call Spawn(29) at(38)(127);
+        Call Spawn(29) at(-69)(126);
+        Call Spawn(27) at(-151)(123);
+        Call Spawn(29) at(-210)(125);
+        Call Spawn(19) at(-160)(89);
+        Call Spawn(17) at(-79)(87);
+        Call Spawn(17) at(59)(91);
+        Call Spawn(29) at(179)(79);
+        Call Spawn(29) at(157)(55);
+        Call Spawn(27) at(75)(51);
+        Call Spawn(29) at(-76)(52);
+        Call Spawn(19) at(-160)(46);
+        Call Spawn(17) at(-213)(58);
+        Call Spawn(19) at(-88)(28);
+        Call Spawn(29) at(63)(22);
+        Call Spawn(27) at(180)(26);
+        Call Spawn(29) at(0)(-20);
+        Call Spawn(27) at(1)(-60);
+        Call Spawn(29) at(7)(-111);
+        Call Spawn(19) at(-59)(105);
+        Call Spawn(17) at(-58)(-42);
+        Call Spawn(7) at(-213)(-149);
+        Call Spawn(19) at(-210)(-13);
+        Call Spawn(17) at(-125)(0);
+        Call Spawn(29) at(80)(-5);
+        Call Spawn(26) at(144)(0);
+        Call Spawn(29) at(216)(-5);
+        Call Spawn(27) at(219)(-34);
+        Call Spawn(29) at(220)(-85);
+        Call Spawn(19) at(60)(-163);
+        Call Spawn(7) at(-78)(-160);
+    }
+    If (Location == 15)
+    {
+        c = 0;
+        Repeat (55)
+        {
+            c += 1;
+            Call Spawn(enemies final[((c % 6) + 1)]) at(final x[c])(final y[c]);
+        }
+    }
+    If (Location == 17)
+    {
+        Call Spawn(35) at(0)(5);
+    }
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define Draw(string type) at x(string x) dist(string dist) (warp=true)
+{
+    Repeat Until (DRAW DIST[(DRAW IDX - 1)] > dist)
+    {
+        DRAW IDX += -1;
+    }
+    Repeat Until (DRAW DIST[DRAW IDX] < dist)
+    {
+        DRAW IDX += 1;
+    }
+    List.InsertItem(DRAW TYPE, DRAW IDX, type);
+    List.InsertItem(DRAW X, DRAW IDX, x);
+    List.InsertItem(DRAW DIST, DRAW IDX, dist);
+}
+
+Define Move(string steps) (warp=false)
+{
+    Call Try move((sin(Motion.Direction()) * steps))(0);
+    Call Try move(0)((cos(Motion.Direction()) * steps));
+}
+
+Define Rotate View(string vx)(string vy) (warp=false)
+{
+    vx = ((vx * cos(Sensing.Of(direction, Player))) - (vy * sin(Sensing.Of(direction, Player))));
+    vy = ((vx * sin(Sensing.Of(direction, Player))) + (vy * cos(Sensing.Of(direction, Player))));
+    If (vy > 0)
+    {
+        Call Draw(type) at x((vx * (DV / vy))) dist(vy);
+    }
+}
+
+Define Spawn(string type) at(string x)(string y) (warp=false)
+{
+    Looks.Show();
+    Motion.GoToXY(x, y);
+    myhp = Operator.Join(Operator.Join(Operator.LetterOf(enemystatsAADDHHH[type], 5), Operator.LetterOf(enemystatsAADDHHH[type], 6)), Operator.LetterOf(enemystatsAADDHHH[type], 7));
+    type = type;
+    If (Not (Sensing.TouchingObject(Entity)))
+    {
+        Control.CreateCloneOf(_myself_);
+    }
+    type = "x";
+    Looks.Hide();
+}
+
+Define Try move(string dx)(string dy) (warp=false)
+{
+    Motion.ChangeXBy(dx);
+    Motion.ChangeYBy(dy);
+    If ((Sensing.TouchingObject(Walls) Or Sensing.TouchingObject(Entity)) And (Not (List.ContainsItem(ghosts, type))))
+    {
+        Motion.ChangeXBy((-1 * dx));
+        Motion.ChangeYBy((-1 * dy));
+    }
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+costume1.png
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+1_.wav
+Coin.wav
+dead.wav

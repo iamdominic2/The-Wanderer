@@ -1,0 +1,235 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+color = 5789776
+i = 8
+scan idx = 30721
+
+
+//----- Lists ---------------------------------------------------------------------------------------------------------
+
+colours = { 
+    0
+    524288
+    2048
+    526336
+    16
+    524304
+    2064
+    526352
+    -526352
+    -2064
+    522224
+    1046512
+    -524304
+    -16
+    524272
+    1048560
+    -522256
+    2032
+    526320
+    1050608
+    -520208
+    4080
+    528368
+    1052656
+    -526336
+    -2048
+    522240
+    1046528
+    -524288
+    1048576
+    -522240
+    1050624
+    -520192
+    4096
+    528384
+    1052672
+    -526320
+    -2032
+    522256
+    1046544
+    -524272
+    1048592
+    -522224
+    1050640
+    -520176
+    4112
+    528400
+    1052688
+    -526304
+    -2016
+    522272
+    1046560
+    -524256
+    32
+    524320
+    1048608
+    -522208
+    2080
+    526368
+    1050656
+    -520160
+    4128
+    528416
+    1052704
+}
+ghost values = { 
+    5.9
+    12.1
+    24.7
+    50
+    100
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(Begin Scan)
+{
+    Looks.Show();
+    Looks.SetSizeTo(100);
+    Looks.SwitchCostumeTo(Textures32);
+    Control.CreateCloneOf(_myself_);
+    Looks.SwitchCostumeTo(black screen);
+    Control.CreateCloneOf(_myself_);
+    Looks.SetSizeTo(1);
+    Looks.SwitchCostumeTo(dot);
+    SCAN PASS = 0;
+    List.DeleteAll(SCAN);
+    Control.Wait(0);
+    Repeat (5)
+    {
+        Event.BroadcastAndWait("Scan Pass");
+    }
+    TIME = Sensing.Timer();
+    Event.BroadcastAndWait("Scan Complete");
+}
+
+WhenBroadcastReceived(Scan Complete)
+{
+    Looks.Hide();
+    Control.DeleteThisClone();
+}
+
+WhenBroadcastReceived(Scan Pass)
+{
+    If (Costume.GetNumberName(number) > 2)
+    {
+        Stop(this script);
+    }
+    If (Costume.GetNumberName(number) > 1)
+    {
+        SCAN PASS += 1;
+        Looks.Show();
+        Looks.SetEffectTo(GHOST, ghost values[SCAN PASS]);
+        Stop(this script);
+    }
+    If (SCAN PASS == 1)
+    {
+        Call Initial Scan;
+    }
+    Else
+    {
+        Call Scan;
+    }
+}
+
+
+//----- Start as clone ------------------------------------------------------------------------------------------------
+
+Control.WhenIStartAsClone()
+{
+    Costume.GoToFrontBack(front);
+    Looks.SetSizeTo(100);
+    Motion.GoToXY(0, 0);
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define Initial Scan (warp=true)
+{
+    Motion.SetY(179);
+    Repeat ((TEXTURE SIZE * 2))
+    {
+        Motion.SetX(-239);
+        Repeat (480)
+        {
+            i = 1;
+            Repeat Until Sensing.TouchingColour(colours[i])
+            {
+                i += 1;
+            }
+            List.Add(SCAN, colours[i]);
+            Motion.ChangeXBy(1);
+        }
+        Motion.ChangeYBy(-1);
+    }
+}
+
+Define Scan (warp=true)
+{
+    Motion.SetY(179);
+    scan idx = 1;
+    Repeat ((TEXTURE SIZE * 2))
+    {
+        Motion.SetX(-239);
+        Repeat (480)
+        {
+            If (Not (Sensing.TouchingColour(color)))
+            {
+                color = (2 * SCAN[scan idx]);
+                i = 1;
+                Repeat Until Sensing.TouchingColour((color + colours[i]))
+                {
+                    i += 1;
+                }
+                color += colours[i];
+            }
+            List.ReplaceItem(SCAN, scan idx, color);
+            scan idx += 1;
+            Motion.ChangeXBy(1);
+        }
+        Motion.ChangeYBy(-1);
+    }
+}
+
+Define Setup Colours List from(string color) depth(string depth) (warp=true)
+{
+    color = color;
+    Repeat (depth)
+    {
+        Repeat (depth)
+        {
+            Repeat (depth)
+            {
+                If (Not (List.ContainsItem(colours, color)))
+                {
+                    List.Add(colours, color);
+                }
+                color += 524288;
+            }
+            color += (2048 - (524288 * depth));
+        }
+        color += (16 - (2048 * depth));
+    }
+}
+
+
+//----- Orphaned blocks -----------------------------------------------------------------------------------------------
+
+List.DeleteAll(colours);
+Call Setup Colours List from(0) depth(2);
+Call Setup Colours List from(-526352) depth(4);
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+black screen.png
+dot.png
+Textures32.png
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav
